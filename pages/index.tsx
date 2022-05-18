@@ -1,12 +1,26 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import pokemons from "./pokemons.json";
+
 import SearchBar from "./SearchBar";
+import index from "./api/index";
+import { IPokemon } from "./IPokemon";
+import Loader from "./Loader";
+import AllPokemons from "./AllPokemon";
 
 const Home: NextPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredPokemons, setFilteredPokemons] = useState(pokemons);
+  const [pokemons, setPokemons] = useState<IPokemon[]>([]);
+  const [filteredPokemons, setFilteredPokemons] = useState<IPokemon[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const pokemons: IPokemon[] = await index();
+      setPokemons(pokemons);
+      setFilteredPokemons(pokemons);
+    };
+    fetchData().catch(console.error);
+  }, []);
 
   useEffect(() => {
     if (searchQuery === "") {
@@ -14,11 +28,11 @@ const Home: NextPage = () => {
     } else {
       setFilteredPokemons(
         pokemons.filter((pokemon) =>
-          pokemon.frenchName.toLowerCase().startsWith(searchQuery)
+          pokemon.name.toLowerCase().startsWith(searchQuery)
         )
       );
     }
-  }, [searchQuery]);
+  }, [pokemons, searchQuery]);
 
   return (
     <div>
@@ -33,21 +47,13 @@ const Home: NextPage = () => {
           <SearchBar
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
+            isActivate={pokemons.length === 0}
           />
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 lg:gap-8 ">
-            {filteredPokemons.map((pokemon: any) => {
-              return (
-                <div
-                  className="border dark:bg-slate-800 text-white rounded-md flex flex-col justify-end text-center hover:font-bold 	cursor-pointer"
-                  key={pokemon.frenchName}
-                >
-                  <img src={pokemon.sprite} className="mx-auto w-20 h-20" />
-                  <p>{pokemon.frenchName}</p>
-                </div>
-              );
-            })}
-          </div>
+          {pokemons.length !== 0 && (
+            <AllPokemons filteredPokemons={filteredPokemons} />
+          )}
         </div>
+        {pokemons.length === 0 && <Loader />}
       </main>
 
       {/* <footer className={styles.footer}></footer> */}
