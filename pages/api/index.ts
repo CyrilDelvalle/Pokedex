@@ -1,13 +1,10 @@
 import getAllPokemons from "./getAllPokemons";
 import getAllPokemonSpecies from "./getAllPokemonSpecies";
-import { IPokemon } from "../IPokemon";
+import { IPokemon } from "interfaces/IPokemon";
 
 const index = async () => {
   const allPokemons = await getAllPokemons();
   const allPokemonSpecies = await getAllPokemonSpecies();
-
-  console.log(allPokemons, allPokemonSpecies);
-
   const pokemons = allPokemons.map((pokemon, index) => {
     const { id } = pokemon;
 

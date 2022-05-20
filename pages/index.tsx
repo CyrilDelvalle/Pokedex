@@ -1,26 +1,27 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
-import SearchBar from "./SearchBar";
+import SearchBar from "./Components/SearchBar";
 import index from "./api/index";
-import { IPokemon } from "./IPokemon";
-import Loader from "./Loader";
-import AllPokemons from "./AllPokemon";
+import { IPokemon } from "interfaces/IPokemon";
+import Loader from "./Components/Loader";
+import AllPokemons from "./Components/PokemonGrid";
+import GlobalContext from "context/global-context";
 
 const Home: NextPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [pokemons, setPokemons] = useState<IPokemon[]>([]);
   const [filteredPokemons, setFilteredPokemons] = useState<IPokemon[]>([]);
+  const global = useContext(GlobalContext);
+  const { pokemons, setPokemons } = global;
 
   useEffect(() => {
     const fetchData = async () => {
       const pokemons: IPokemon[] = await index();
-      setPokemons(pokemons);
-      setFilteredPokemons(pokemons);
+      setPokemons(pokemons), setFilteredPokemons(pokemons);
     };
     fetchData().catch(console.error);
-  }, []);
+  }, [setPokemons]);
 
   useEffect(() => {
     if (searchQuery === "") {

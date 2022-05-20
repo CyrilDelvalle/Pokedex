@@ -1,7 +1,11 @@
 import Image from "next/image";
-import { IPokemon } from "./IPokemon";
+import { IPokemon } from "interfaces/IPokemon";
 
-const AllPokemons = ({ filteredPokemons }: any) => {
+const AllPokemons = ({
+  filteredPokemons,
+}: {
+  filteredPokemons: IPokemon[];
+}) => {
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 lg:gap-8 ">
       {filteredPokemons.map(({ name, url }: IPokemon) => {
@@ -11,12 +15,7 @@ const AllPokemons = ({ filteredPokemons }: any) => {
             key={name}
           >
             <div className="mx-auto w-20 h-20 relative">
-              <Image
-                src={url}
-                alt="Picture of the author"
-                layout="fill"
-                objectFit="contain"
-              />
+              <Image src={url} alt="name" layout="fill" objectFit="contain" />
             </div>
             <p>{name}</p>
           </div>
