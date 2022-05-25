@@ -21,7 +21,8 @@
     "**/*.ts",
     "**/*.tsx",
     "**/*.png",
-    "context/state.js"
+    "context/state.js",
+    "contexts/pokemon.ts"
   ],
   "exclude": ["node_modules"]
 }

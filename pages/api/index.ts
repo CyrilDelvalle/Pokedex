@@ -2,10 +2,8 @@ import getAllPokemons from "./getAllPokemons";
 import getAllPokemonSpecies from "./getAllPokemonSpecies";
 import { IPokemon } from "interfaces/IPokemon";
 
-const index = async () => {
-  const allPokemons = await getAllPokemons();
-  const allPokemonSpecies = await getAllPokemonSpecies();
-  const pokemons = allPokemons.map((pokemon, index) => {
+const setPokemonGridData = (allPokemons: any[], allPokemonSpecies: any[]) => {
+  return allPokemons.map((pokemon, index) => {
     const { id } = pokemon;
 
     return {
@@ -16,8 +14,14 @@ const index = async () => {
       url: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`,
     } as IPokemon;
   });
+};
 
-  return pokemons;
+const index = async () => {
+  const allPokemons = await getAllPokemons();
+  const allPokemonSpecies = await getAllPokemonSpecies();
+  const pokemonsGrid = setPokemonGridData(allPokemons, allPokemonSpecies);
+
+  return { pokemonsGrid, allPokemons, allPokemonSpecies };
 };
 
 export default index;

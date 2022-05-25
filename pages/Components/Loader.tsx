@@ -1,12 +1,24 @@
-import GlobalContext from "../../context/global-context";
 import Image from "next/image";
-import { useContext } from "react";
+import { useEffect, useState } from "react";
 import pokeball from "../../public/pokeballLoaderSpinner.png";
-import SetRandomLoaderMessage from "../../utils/setRandomLoaderMessage";
+import randomMessages from "../../utils/randomMessages.json";
 
 const Loader = () => {
-  const global = useContext(GlobalContext);
-  SetRandomLoaderMessage();
+  const [loaderMessage, setLoaderMessage] = useState(randomMessages[0].message);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const result = randomMessages[Math.floor(Math.random() * 10)].message;
+
+      if (result) {
+        setLoaderMessage(result);
+      }
+    }, 2000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [loaderMessage]);
 
   return (
     <div>
@@ -23,9 +35,7 @@ const Loader = () => {
           />
         </div>
       </div>
-      <p className="text-gray-200 text-center text-xl mt-4">
-        {global.loaderMessage}
-      </p>
+      <p className="text-gray-200 text-center text-xl mt-4">{loaderMessage}</p>
     </div>
   );
 };

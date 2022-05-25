@@ -7,28 +7,32 @@ import index from "./api/index";
 import { IPokemon } from "interfaces/IPokemon";
 import Loader from "./Components/Loader";
 import AllPokemons from "./Components/PokemonGrid";
-import GlobalContext from "context/global-context";
+import PokemonContext from "../contexts/pokemon";
 
 const Home: NextPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredPokemons, setFilteredPokemons] = useState<IPokemon[]>([]);
-  const global = useContext(GlobalContext);
-  const { pokemons, setPokemons } = global;
+  const { pokemons, addPokemons } = useContext<any>(PokemonContext);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const pokemons: IPokemon[] = await index();
-      setPokemons(pokemons), setFilteredPokemons(pokemons);
-    };
-    fetchData().catch(console.error);
-  }, [setPokemons]);
+    if (!pokemons.pokemonsGrid.length) {
+      const fetchData = async () => {
+        const result = await index();
+        addPokemons(result);
+        setFilteredPokemons(result.pokemonsGrid);
+      };
+      fetchData().catch(console.error);
+    } else {
+      setFilteredPokemons(pokemons.pokemonsGrid);
+    }
+  }, [addPokemons, pokemons.pokemonsGrid]);
 
   useEffect(() => {
     if (searchQuery === "") {
-      setFilteredPokemons(pokemons);
+      setFilteredPokemons(pokemons.pokemonsGrid);
     } else {
       setFilteredPokemons(
-        pokemons.filter((pokemon) =>
+        pokemons.pokemonsGrid.filter((pokemon: { name: string }) =>
           pokemon.name.toLowerCase().startsWith(searchQuery)
         )
       );
@@ -50,11 +54,11 @@ const Home: NextPage = () => {
             setSearchQuery={setSearchQuery}
             isActivate={pokemons.length === 0}
           />
-          {pokemons.length !== 0 && (
+          {pokemons.pokemonsGrid.length && (
             <AllPokemons filteredPokemons={filteredPokemons} />
           )}
         </div>
-        {pokemons.length === 0 && <Loader />}
+        {!pokemons.pokemonsGrid.length && <Loader />}
       </main>
 
       {/* <footer className={styles.footer}></footer> */}
