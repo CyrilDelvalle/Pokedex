@@ -12,6 +12,7 @@ const setPokemonGridData = (allPokemons: any[], allPokemonSpecies: any[]) => {
         (lang: { language: { name: string } }) => lang.language.name === "fr"
       ).name,
       url: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`,
+      types: allPokemons[index].types,
     } as IPokemon;
   });
 };
@@ -20,6 +21,8 @@ const index = async () => {
   const allPokemons = await getAllPokemons();
   const allPokemonSpecies = await getAllPokemonSpecies();
   const pokemonsGrid = setPokemonGridData(allPokemons, allPokemonSpecies);
+
+  console.log({ pokemonsGrid, allPokemons, allPokemonSpecies });
 
   return { pokemonsGrid, allPokemons, allPokemonSpecies };
 };
