@@ -1,6 +1,6 @@
-const getAllPokemonSpecies = async () => {
+const getAllPokemonSpecies = async (currentOffset: number) => {
   const response = await fetch(
-    "https://pokeapi.co/api/v2/pokemon-species/?limit=151"
+    `https://pokeapi.co/api/v2/pokemon-species/?limit=100&offset=${currentOffset}`
   );
   const data = await response.json();
   const promisesArray = data.results.map((result: { url: string }) => {

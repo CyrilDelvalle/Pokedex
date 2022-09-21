@@ -1,7 +1,9 @@
 import { IPokemonApi } from "interfaces/IPokemon";
 
-const getAllPokemons = async () => {
-  const response = await fetch("https://pokeapi.co/api/v2/pokemon/?limit=151");
+const getAllPokemons = async (currentOffset: number) => {
+  const response = await fetch(
+    `https://pokeapi.co/api/v2/pokemon/?limit=100&offset=${currentOffset}`
+  );
   const data = await response.json();
 
   const promisesArray = data.results.map((result: IPokemonApi) => {

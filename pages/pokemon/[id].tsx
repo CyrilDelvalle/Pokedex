@@ -5,14 +5,15 @@ import { useContext, useEffect } from "react";
 
 const PokemonDetail: NextPage = () => {
   const router = useRouter();
-  const { name } = router.query;
-  const { pokemons } = useContext<any>(PokemonContext);
-  const pokemonName = name as string;
+  const { id } = router.query;
+  // const { pokemons } = useContext<any>(PokemonContext);
+  // const pokemonName = name as string;
 
-  console.log(pokemons);
+  // console.log(pokemons);
 
   return (
-    <div> {pokemonName.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}</div>
+    <>{id}</>
+    // <div> {pokemonName.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}</div>
   );
 };
 

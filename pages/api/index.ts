@@ -17,9 +17,9 @@ const setPokemonGridData = (allPokemons: any[], allPokemonSpecies: any[]) => {
   });
 };
 
-const index = async () => {
-  const allPokemons = await getAllPokemons();
-  const allPokemonSpecies = await getAllPokemonSpecies();
+const index = async (currentOffset: number) => {
+  const allPokemons = await getAllPokemons(currentOffset);
+  const allPokemonSpecies = await getAllPokemonSpecies(currentOffset);
   const pokemonsGrid = setPokemonGridData(allPokemons, allPokemonSpecies);
 
   console.log({ pokemonsGrid, allPokemons, allPokemonSpecies });
